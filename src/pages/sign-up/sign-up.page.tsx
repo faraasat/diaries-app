@@ -11,12 +11,20 @@ import {
   TextField,
 } from "@material-ui/core";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { postLoginData } from "../../store/login.reducer";
 import "./sign-up.styles.css";
+import { toast } from "react-toastify";
+import cuid from "cuid";
 
 const SignUpPage = () => {
   const [newsletterStatus, setNewsletterStatus] = useState(false);
   const [agreementStatus, setAgreementStatus] = useState(true);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const dispatch = useDispatch();
 
   const handleNewsLetterChange = () => {
     setNewsletterStatus(!newsletterStatus);
@@ -24,6 +32,25 @@ const SignUpPage = () => {
 
   const handleAgreementChange = () => {
     setAgreementStatus(!agreementStatus);
+  };
+
+  const handleSignUp = (e: any) => {
+    e.preventDefault();
+    if (username.length < 3 || password.length < 3 || email.length < 3) {
+      toast.error(
+        "❌ Please Check the fields. Every Field must contain more than 3 characters!"
+      );
+      return;
+    }
+    dispatch(
+      postLoginData({
+        id: cuid(),
+        username: username,
+        password: password,
+        email: email,
+        newsletter: newsletterStatus,
+      })
+    );
   };
 
   return (
@@ -35,6 +62,7 @@ const SignUpPage = () => {
             label="Username"
             variant="outlined"
             placeholder="e.g. Max"
+            onChange={(e) => setUsername(e.target!.value!)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -49,6 +77,8 @@ const SignUpPage = () => {
             label="Email"
             variant="outlined"
             placeholder="e.g. max@example.com"
+            type="email"
+            onChange={(e) => setEmail(e.target!.value!)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -64,6 +94,7 @@ const SignUpPage = () => {
             label="Password"
             variant="outlined"
             placeholder="e.g. Abc$1234*%"
+            onChange={(e) => setPassword(e.target!.value!)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -117,8 +148,9 @@ const SignUpPage = () => {
             disabled={!agreementStatus}
             type="submit"
             className="sign-up-page__btn"
+            onClick={(e) => handleSignUp(e)}
           >
-            sign-up
+            sign up
           </button>
         </div>
       </form>

@@ -1,6 +1,6 @@
 .sign-up-page__alignment {
   width: 100%;
-  min-height: calc(550px);
+  min-height: calc(720px);
   height: calc(100vh);
   display: flex;
   align-items: center;

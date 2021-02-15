@@ -1,3 +1,16 @@
-[{
-    
-}]
+[
+  {
+    "id": "1",
+    "username": "admin",
+    "password": "admin",
+    "email": "admin@diaryApp.com",
+    "newsletter": false
+  },
+  {
+    "id": "2",
+    "username": "farasat",
+    "password": "farasat",
+    "email": "farasataliazeemi1@gmail.com",
+    "newsletter": true
+  }
+]

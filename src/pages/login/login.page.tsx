@@ -6,16 +6,36 @@ import {
   InputAdornment,
   TextField,
 } from "@material-ui/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./login.styles.css";
 import { Link } from "react-router-dom";
+import {
+  getLoginData,
+  selectLoginData,
+  login,
+} from "../../store/login.reducer";
+import { useDispatch, useSelector } from "react-redux";
 
 const LoginPage = () => {
   const [agreementStatus, setAgreementStatus] = useState(true);
+  const { loginData } = useSelector(selectLoginData);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const handleAgreementChange = () => {
     setAgreementStatus(!agreementStatus);
   };
+
+  const handleLogin = (e: any) => {
+    e.preventDefault();
+    console.log(dispatch(login({ username: username, password: password })));
+    console.log(loginData);
+  };
+
+  useEffect(() => {
+    dispatch(getLoginData());
+  }, [dispatch]);
 
   return (
     <section className="login-page__alignment">
@@ -26,6 +46,7 @@ const LoginPage = () => {
             label="Username"
             variant="outlined"
             placeholder="e.g. Max"
+            onChange={(e) => setUsername(e.target.value!)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -41,6 +62,7 @@ const LoginPage = () => {
             label="Password"
             variant="outlined"
             placeholder="e.g. Abc$1234*%"
+            onChange={(e) => setPassword(e.target.value!)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -80,6 +102,7 @@ const LoginPage = () => {
             disabled={!agreementStatus}
             type="submit"
             className="login-page__btn"
+            onClick={(e) => handleLogin(e)}
           >
             Login
           </button>
