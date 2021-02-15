@@ -17,6 +17,7 @@ import { postLoginData } from "../../store/login.reducer";
 import "./sign-up.styles.css";
 import { toast } from "react-toastify";
 import cuid from "cuid";
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
   const [newsletterStatus, setNewsletterStatus] = useState(false);
@@ -25,6 +26,7 @@ const SignUpPage = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleNewsLetterChange = () => {
     setNewsletterStatus(!newsletterStatus);
@@ -34,7 +36,7 @@ const SignUpPage = () => {
     setAgreementStatus(!agreementStatus);
   };
 
-  const handleSignUp = (e: any) => {
+  const HandleSignUp = (e: any) => {
     e.preventDefault();
     if (username.length < 3 || password.length < 3 || email.length < 3) {
       toast.error(
@@ -51,6 +53,8 @@ const SignUpPage = () => {
         newsletter: newsletterStatus,
       })
     );
+    toast.success("✔ Sign Up Successful!");
+    navigate("/login");
   };
 
   return (
@@ -148,7 +152,7 @@ const SignUpPage = () => {
             disabled={!agreementStatus}
             type="submit"
             className="sign-up-page__btn"
-            onClick={(e) => handleSignUp(e)}
+            onClick={(e) => HandleSignUp(e)}
           >
             sign up
           </button>

@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { Container, IconButton, Menu, MenuItem } from "@material-ui/core";
 import "./navbar.styles.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLoginData, logout } from "../../store/login.reducer";
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function NavBar() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { loginState, userData } = useSelector(selectLoginData);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const isMenuOpen = Boolean(anchorEl);
@@ -36,6 +37,7 @@ export default function NavBar() {
   const handleLogout = () => {
     setAnchorEl(null);
     dispatch(logout());
+    navigate("/login");
   };
   const renderMenu = (
     <Menu

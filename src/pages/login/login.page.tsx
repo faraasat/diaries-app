@@ -8,20 +8,16 @@ import {
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import "./login.styles.css";
-import { Link } from "react-router-dom";
-import {
-  getLoginData,
-  selectLoginData,
-  login,
-} from "../../store/login.reducer";
-import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { getLoginData, login } from "../../store/login.reducer";
+import { useDispatch } from "react-redux";
 
 const LoginPage = () => {
   const [agreementStatus, setAgreementStatus] = useState(true);
-  const { loginData } = useSelector(selectLoginData);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleAgreementChange = () => {
     setAgreementStatus(!agreementStatus);
@@ -29,8 +25,8 @@ const LoginPage = () => {
 
   const handleLogin = (e: any) => {
     e.preventDefault();
-    console.log(dispatch(login({ username: username, password: password })));
-    console.log(loginData);
+    dispatch(login({ username: username, password: password }));
+    navigate("/diaries");
   };
 
   useEffect(() => {
