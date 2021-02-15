@@ -1,4 +1,8 @@
-import { faLock, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEnvelope,
+  faLock,
+  faUserCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Checkbox,
@@ -7,21 +11,26 @@ import {
   TextField,
 } from "@material-ui/core";
 import { useState } from "react";
-import "./login.styles.css";
 import { Link } from "react-router-dom";
+import "./sign-up.styles.css";
 
-const LoginPage = () => {
+const SignUpPage = () => {
+  const [newsletterStatus, setNewsletterStatus] = useState(false);
   const [agreementStatus, setAgreementStatus] = useState(true);
+
+  const handleNewsLetterChange = () => {
+    setNewsletterStatus(!newsletterStatus);
+  };
 
   const handleAgreementChange = () => {
     setAgreementStatus(!agreementStatus);
   };
 
   return (
-    <section className="login-page__alignment">
-      <form className="login-page__form">
-        <div className="login-page__form-head">Login</div>
-        <div className="login-page__form-block__display">
+    <section className="sign-up-page__alignment">
+      <form className="sign-up-page__form">
+        <div className="sign-up-page__form-head">Sign Up</div>
+        <div className="sign-up-page__form-block__display">
           <TextField
             label="Username"
             variant="outlined"
@@ -30,6 +39,20 @@ const LoginPage = () => {
               startAdornment: (
                 <InputAdornment position="start">
                   <FontAwesomeIcon icon={faUserCircle} color="grey" />
+                </InputAdornment>
+              ),
+            }}
+            required
+          />
+          <br />
+          <TextField
+            label="Email"
+            variant="outlined"
+            placeholder="e.g. max@example.com"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FontAwesomeIcon icon={faEnvelope} color="grey" />
                 </InputAdornment>
               ),
             }}
@@ -50,16 +73,30 @@ const LoginPage = () => {
             }}
             required
           />
-          <div style={{ margin: "15px 0px 3px 0px", width: "90%" }}>
+          <div style={{ margin: "15px 0px", width: "90%" }}>
             <FormControlLabel
               control={
                 <Checkbox
                   checked={agreementStatus}
                   onChange={handleAgreementChange}
                   name="agreement"
+                  color="primary"
                 />
               }
               label="&nbsp;&nbsp;Do you agree to our Licence and Agreement?"
+            />
+          </div>
+          <div style={{ margin: "0px 0px 15px 0px", width: "90%" }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={newsletterStatus}
+                  onChange={handleNewsLetterChange}
+                  name="newsletter"
+                  color="primary"
+                />
+              }
+              label="Want to have Update and News? Subscribe to our newsletter!"
             />
           </div>
           <Link
@@ -72,16 +109,16 @@ const LoginPage = () => {
               fontFamily: "Pacifico, cursive",
               fontSize: 18,
             }}
-            to="/sign-up"
+            to="/login"
           >
-            Don't have Account? Sign up Now!
+            Already have Account? Login Now!
           </Link>
           <button
             disabled={!agreementStatus}
             type="submit"
-            className="login-page__btn"
+            className="sign-up-page__btn"
           >
-            Login
+            sign-up
           </button>
         </div>
       </form>
@@ -89,4 +126,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;

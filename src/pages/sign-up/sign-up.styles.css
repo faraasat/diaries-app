@@ -1,4 +1,4 @@
-.login-page__alignment {
+.sign-up-page__alignment {
   width: 100%;
   min-height: calc(550px);
   height: calc(100vh);
@@ -8,25 +8,25 @@
   flex-direction: column;
   background: linear-gradient(
       150deg,
-      rgba(255, 214, 153, 0.5),
-      rgba(143, 255, 171, 0.5)
+      rgba(255, 153, 212, 0.6),
+      rgba(143, 164, 255, 0.5)
     ),
-    url("../../assets/diary-bg-3.jpg");
+    url("../../assets/diary-bg-4.jpg");
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
-.login-page__form {
+.sign-up-page__form {
   width: 30%;
-  background-color: rgba(151, 255, 151, 0.55);
+  background-color: rgba(151, 161, 255, 0.55);
   border-radius: 7px;
   margin-top: 40px;
   box-sizing: border-box;
 }
 
-.login-page__form-head {
+.sign-up-page__form-head {
   text-align: center;
   font-family: "Pacifico", cursive;
   font-size: 30px;
@@ -35,7 +35,7 @@
   text-shadow: 0px 0px 15px rgba(1, 1, 1, 1);
 }
 
-.login-page__form-block__display {
+.sign-up-page__form-block__display {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
@@ -44,16 +44,16 @@
   margin: 30px 0px;
 }
 
-.login-page__form-block__display .MuiFormControl-root {
+.sign-up-page__form-block__display .MuiFormControl-root {
   width: 90%;
 }
 
-.login-page__btn {
+.sign-up-page__btn {
   background-image: linear-gradient(
     to right,
-    #3ca55c 0%,
-    #b5ac49 51%,
-    #3ca55c 100%
+    #314755 0%,
+    #26a0da 51%,
+    #314755 100%
   );
   font-family: "Potta One", serif;
   font-size: 20px;
@@ -73,7 +73,7 @@
   text-shadow: 0px 0px 3px rgba(1, 1, 1, 1);
 }
 
-.login-page__btn:hover {
+.sign-up-page__btn:hover {
   background-position: right center;
   color: #fff;
   text-decoration: none;

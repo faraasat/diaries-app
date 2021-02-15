@@ -6,6 +6,10 @@
   font-size: 27px !important;
 }
 
+.navbar-brand__styles * {
+  transition: all 0.5s ease-in;
+}
+
 .navbar-stick__bg-styles {
   background: linear-gradient(
     150deg,
@@ -14,10 +18,23 @@
   ) !important;
 }
 
+.navbar-stick__bg-styles:hover {
+  background: linear-gradient(
+    150deg,
+    rgba(102, 163, 255, 0.85),
+    rgba(255, 222, 132, 0.85)
+  ) !important;
+}
+
 .navbar-action__btn {
-    text-transform: capitalize !important;
-    font-family: "Potta One", cursive !important;
-    text-shadow: 0px 0px 2px rgba(1, 1, 1, 1);
-    font-size: 23px !important;
-    border-right: 3px solid rgb(229, 255, 113) !important;
+  text-transform: capitalize !important;
+  font-family: "Potta One", cursive !important;
+  text-shadow: 0px 0px 2px rgba(1, 1, 1, 1);
+  font-size: 23px !important;
+  border-right: 3px solid rgb(229, 255, 113) !important;
+  transition: all 0.5s ease-in;
+}
+
+.navbar-action__btn:hover {
+  transform: scale(1.01);
 }
