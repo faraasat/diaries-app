@@ -1,0 +1,23 @@
+.navbar-brand__styles {
+  cursor: pointer;
+  font-family: "Pacifico", cursive !important;
+  font-weight: bold !important;
+  text-shadow: 0px 0px 3px rgba(1, 1, 1, 1);
+  font-size: 27px !important;
+}
+
+.navbar-stick__bg-styles {
+  background: linear-gradient(
+    150deg,
+    rgba(255, 222, 132, 0.8),
+    rgba(102, 163, 255, 0.8)
+  ) !important;
+}
+
+.navbar-action__btn {
+    text-transform: capitalize !important;
+    font-family: "Potta One", cursive !important;
+    text-shadow: 0px 0px 2px rgba(1, 1, 1, 1);
+    font-size: 23px !important;
+    border-right: 3px solid rgb(229, 255, 113) !important;
+}

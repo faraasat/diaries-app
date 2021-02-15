@@ -9,7 +9,7 @@
 
 .home-page__background {
   width: 100%;
-  height: 650px;
+  height: 730px;
   background: linear-gradient(
       150deg,
       rgba(252, 203, 245, 0.5),
@@ -33,7 +33,7 @@
   font-weight: bold;
   font-size: 2.75vw;
   user-select: none;
-  transform: translate(-15%, 0px) rotate(-10deg);
+  transform: translate(-15%, 25px) rotate(-10deg);
   margin-block: 0em;
 }
 
@@ -43,14 +43,14 @@
   font-size: 1.9vw;
   font-weight: bold;
   padding: 0px 15vw;
-  transform: translate(12%, 40%) rotate(3deg);
+  transform: translate(12%, 70%) rotate(3deg);
   text-shadow: 1px 1px 3px rgb(255, 102, 166);
   user-select: none;
   margin-block: 1em;
 }
 
 .home-page__btn {
-  transform: translateY(80%);
+  transform: translateY(100%);
   padding: 20px 50px;
   text-align: center;
   text-transform: uppercase;
@@ -84,5 +84,142 @@
 }
 
 .home-page__details {
-  height: 250px;
+  background-color: rgb(255, 196, 235);
+  width: 100%;
+}
+
+.home-page__details-detail {
+  height: 400px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.home-page__details-card .MuiPaper-root {
+  background-color: rgba(255, 255, 255, 0.3);
+  padding: 50px 20px;
+  width: 300px;
+}
+
+.home-page__details-card {
+  transition: all 0.5s ease-in-out;
+}
+
+.home-page__details-card:hover {
+  transform: scale(1.09);
+}
+
+.home-page__details-card:hover .home-page__details-icon {
+  transform: scale(1.09);
+}
+
+.home-page__details-icon {
+  font-size: 60px;
+  transition: all 0.5s ease-in-out;
+  filter: drop-shadow(0px 0px 0.9px rgba(1, 1, 1, 1));
+}
+
+.home-page__details-heading__main {
+  font-family: "Pacifico", cursive;
+  margin-block: 0.1em;
+  font-size: 30px;
+  font-weight: bold;
+  text-shadow: 0px 0px 1.5px rgba(1, 1, 1, 1);
+  color: rgb(133, 190, 255);
+}
+
+.home-page__details-heading__sub {
+  font-family: "Potta One", serif;
+  margin-block: 0em;
+  font-size: 19px;
+  color: rgb(165, 165, 165);
+}
+
+.home-page__details-card-1 .home-page__details-icon {
+  color: rgb(230, 177, 134);
+}
+
+.home-page__details-card-2 .home-page__details-icon {
+  color: rgb(172, 185, 255);
+}
+
+.home-page__details-card-3 .home-page__details-icon {
+  color: rgb(255, 172, 172);
+}
+
+.home-page__cover {
+  width: 100%;
+  height: 350px;
+  background: linear-gradient(
+      150deg,
+      rgba(86, 131, 75, 0.6),
+      rgba(252, 245, 203, 0.6)
+    ),
+    url("../../assets/diary-bg-2.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.home-page__cover-cover {
+  height: 350px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.home-page__cover-cover button {
+  background-image: linear-gradient(
+    to right,
+    #16a085 0%,
+    #f4d03f 51%,
+    #16a085 100%
+  );
+  padding: 18px 42px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-family: "Potta One", serif;
+  font-size: 18px;
+}
+
+.home-page__cover-cover button:hover {
+  background-position: right center;
+  color: #fff;
+  text-decoration: none;
+}
+
+.home-page__cover-heading {
+  text-align: center;
+  color: rgb(1, 162, 255);
+  font-family: "Pacifico", cursive;
+  font-size: 2vw;
+  font-weight: bold;
+  text-shadow: 0px 0px 3px rgba(1, 1, 1, 1);
+}
+
+.home-page__footer {
+  width: 100%;
+  height: 100px;
+  background-color: rgb(251, 255, 212);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Pacifico", cursive;
+  font-size: 28px;
+  color: rgb(185, 255, 22);
+  text-shadow: 0px 0px 4px rgba(1, 1, 1, 1);
+  letter-spacing: 6px;
+  font-weight: bold;
 }
