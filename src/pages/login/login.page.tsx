@@ -2,6 +2,7 @@ import { faLock, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Checkbox,
+  CircularProgress,
   FormControlLabel,
   InputAdornment,
   TextField,
@@ -9,8 +10,12 @@ import {
 import { useEffect, useState } from "react";
 import "./login.styles.css";
 import { Link, useNavigate } from "react-router-dom";
-import { getLoginData, login } from "../../store/login.reducer";
-import { useDispatch } from "react-redux";
+import {
+  getLoginData,
+  login,
+  selectLoginData,
+} from "../../store/login.reducer";
+import { useDispatch, useSelector } from "react-redux";
 
 const LoginPage = () => {
   const [agreementStatus, setAgreementStatus] = useState(true);
@@ -18,6 +23,25 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { loginState, loadingState } = useSelector(selectLoginData);
+
+  if (loadingState) {
+    <div
+      style={{
+        width: "100%",
+        height: "100vh - 64px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <CircularProgress color="secondary" />
+    </div>;
+  }
+
+  if (loginState === true) {
+    navigate("/diaries");
+  }
 
   const handleAgreementChange = () => {
     setAgreementStatus(!agreementStatus);

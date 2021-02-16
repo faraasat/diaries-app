@@ -6,14 +6,15 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Checkbox,
+  CircularProgress,
   FormControlLabel,
   InputAdornment,
   TextField,
 } from "@material-ui/core";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { postLoginData } from "../../store/login.reducer";
+import { postLoginData, selectLoginData } from "../../store/login.reducer";
 import "./sign-up.styles.css";
 import { toast } from "react-toastify";
 import cuid from "cuid";
@@ -27,6 +28,25 @@ const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { loginState, loadingState } = useSelector(selectLoginData);
+
+  if (loadingState) {
+    <div
+      style={{
+        width: "100%",
+        height: "100vh - 64px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <CircularProgress color="secondary" />
+    </div>;
+  }
+
+  if (loginState === true) {
+    navigate("/diaries");
+  }
 
   const handleNewsLetterChange = () => {
     setNewsletterStatus(!newsletterStatus);
@@ -40,7 +60,10 @@ const SignUpPage = () => {
     e.preventDefault();
     if (username.length < 3 || password.length < 3 || email.length < 3) {
       toast.error(
-        "❌ Please Check the fields. Every Field must contain more than 3 characters!"
+        "❌ Please Check the fields. Every Field must contain more than 3 characters!",
+        {
+          position: "bottom-right",
+        }
       );
       return;
     }
@@ -53,7 +76,9 @@ const SignUpPage = () => {
         newsletter: newsletterStatus,
       })
     );
-    toast.success("✔ Sign Up Successful!");
+    toast.success("✔ Sign Up Successful!", {
+      position: "bottom-right",
+    });
     navigate("/login");
   };
 

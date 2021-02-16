@@ -76,6 +76,7 @@ export default function NavBar() {
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
               color="inherit"
+              style={{ textTransform: "uppercase" }}
             >
               <AccountCircle />
               &nbsp;&nbsp;{userData.username}

@@ -71,17 +71,23 @@ const LoginReducer = createSlice({
             newsletter: value.newsletter,
           };
           state.loginState = true;
-          toast.success("✔ Logged In Successfully!");
+          toast.success("✔ Logged In Successfully!", {
+            position: "bottom-right",
+          });
           return value;
         });
       if (!flag) {
-        toast.error("❌ Incorrect Username or Password!");
+        toast.error("❌ Incorrect Username or Password!", {
+          position: "bottom-right",
+        });
       }
     },
     logout: (state) => {
       state.loginState = false;
       state.userData = userLoginData;
-      toast.success("✔ Logged Out Successfully!");
+      toast.success("✔ Logged Out Successfully!", {
+        position: "bottom-right",
+      });
     },
   },
   extraReducers: {
