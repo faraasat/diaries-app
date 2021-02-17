@@ -25,22 +25,24 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { loginState, loadingState } = useSelector(selectLoginData);
 
-  if (loadingState) {
-    <div
-      style={{
-        width: "100%",
-        height: "100vh - 64px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <CircularProgress color="secondary" />
-    </div>;
-  }
+  useEffect(() => {
+    dispatch(getLoginData());
+  }, [dispatch]);
 
-  if (loginState === true) {
-    navigate("/diaries");
+  if (loadingState) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <CircularProgress color="secondary" />
+      </div>
+    );
   }
 
   const handleAgreementChange = () => {
@@ -53,9 +55,9 @@ const LoginPage = () => {
     navigate("/diaries");
   };
 
-  useEffect(() => {
-    dispatch(getLoginData());
-  }, [dispatch]);
+  if (loadingState === false && loginState === true) {
+    navigate("/diaries");
+  }
 
   return (
     <section className="login-page__alignment">

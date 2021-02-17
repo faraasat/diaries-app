@@ -55,7 +55,7 @@ export default function NavBar() {
       </MenuItem>
     </Menu>
   );
-  console.log(loginState, userData);
+  // console.log(loginState, userData);
 
   return (
     <AppBar position="fixed" className="navbar-stick__bg-styles">

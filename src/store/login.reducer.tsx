@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import { ILoginData } from "./login";
 
-const initialLoginData: ILoginData[] = [
+export const initialLoginData: ILoginData[] = [
   {
     id: "",
     username: "",
@@ -12,7 +12,7 @@ const initialLoginData: ILoginData[] = [
   },
 ];
 
-const userLoginData: any = {
+export const userLoginData: any = {
   id: "",
   username: "",
   password: "",
@@ -49,41 +49,96 @@ const LoginReducer = createSlice({
     userData: userLoginData,
   },
   reducers: {
-    login: (state, action) => {
-      let flag: boolean = false;
-      if (action.payload.username === "" && action.payload.password === "") {
+    initiateLogin: (state, action) => {
+      if (
+        (action.payload.username === "" && action.payload.password === "") ||
+        action.payload === null
+      ) {
         return;
       }
-      Object.entries(state.loginData)
-        .filter((datum: any) => {
-          return (
-            datum[1].username.includes(action.payload.username) &&
-            datum[1].password.includes(action.payload.password)
-          );
-        })
-        .map(([key, value]: [any, any]) => {
-          flag = true;
-          state.userData = {
-            id: value.id,
-            username: value.username,
-            password: value.password,
-            email: value.email,
-            newsletter: value.newsletter,
-          };
-          state.loginState = true;
-          toast.success("✔ Logged In Successfully!", {
+      if (state.loadingState === false) {
+        Object.entries(state.loginData)
+          .filter((datum: any) => {
+            return (
+              datum[1].username.includes(action.payload.username) &&
+              datum[1].password.includes(action.payload.password)
+            );
+          })
+          .map(([key, value]: [any, any]) => {
+            sessionStorage.setItem(
+              "userLoginCred",
+              JSON.stringify({
+                id: value.id,
+                username: value.username,
+                password: value.password,
+                email: value.email,
+                newsletter: value.newsletter,
+              })
+            );
+            state.userData = {
+              id: value.id,
+              username: value.username,
+              password: value.password,
+              email: value.email,
+              newsletter: value.newsletter,
+            };
+            state.loginState = true;
+            return value;
+          });
+      }
+    },
+    login: (state, action) => {
+      let flag: boolean = false;
+      if (
+        (action.payload.username === "" && action.payload.password === "") ||
+        action.payload === null
+      ) {
+        return;
+      }
+      if (state.loadingState === false) {
+        Object.entries(state.loginData)
+          .filter((datum: any) => {
+            return (
+              datum[1].username.includes(action.payload.username) &&
+              datum[1].password.includes(action.payload.password)
+            );
+          })
+          .map(([key, value]: [any, any]) => {
+            flag = true;
+            sessionStorage.setItem(
+              "userLoginCred",
+              JSON.stringify({
+                id: value.id,
+                username: value.username,
+                password: value.password,
+                email: value.email,
+                newsletter: value.newsletter,
+              })
+            );
+            state.userData = {
+              id: value.id,
+              username: value.username,
+              password: value.password,
+              email: value.email,
+              newsletter: value.newsletter,
+            };
+            state.loginState = true;
+            toast.success("✔ Logged In Successfully!", {
+              position: "bottom-right",
+            });
+            return value;
+          });
+        if (!flag && state.loadingState === false) {
+          toast.error("❌ Incorrect Username or Password!", {
             position: "bottom-right",
           });
-          return value;
-        });
-      if (!flag) {
-        toast.error("❌ Incorrect Username or Password!", {
-          position: "bottom-right",
-        });
+        }
       }
     },
     logout: (state) => {
+      // sessionStorage.setItem("userLoginState", JSON.stringify(false));
       state.loginState = false;
+      sessionStorage.setItem("userLoginCred", JSON.stringify(userLoginData));
       state.userData = userLoginData;
       toast.success("✔ Logged Out Successfully!", {
         position: "bottom-right",
@@ -122,7 +177,7 @@ const LoginReducer = createSlice({
 
 export default LoginReducer;
 
-export const { login, logout } = LoginReducer.actions;
+export const { initiateLogin, login, logout } = LoginReducer.actions;
 
 export const selectLoginData = (state: any) => ({
   loadingState: state.loginData.loadingState,

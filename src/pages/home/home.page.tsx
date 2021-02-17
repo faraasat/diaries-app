@@ -7,8 +7,15 @@ import {
   faUserTag,
 } from "@fortawesome/free-solid-svg-icons";
 import { ButtonBase, Card, Container } from "@material-ui/core";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
+  const handleRedirectToDiary = () => {
+    navigate("/login");
+  };
+
   return (
     <section className="home-page__alignment">
       <div className="home-page__background">
@@ -19,7 +26,10 @@ const HomePage = () => {
           We provide world class facility to store and maintain private and
           public diaries so you can have full control over your life notes!
         </p>
-        <button className="home-page__btn">
+        <button
+          onClick={() => handleRedirectToDiary()}
+          className="home-page__btn"
+        >
           Get Started Now!&nbsp;
           <FontAwesomeIcon icon={faThumbsUp} />
         </button>
@@ -82,7 +92,9 @@ const HomePage = () => {
               public and private diaries with one of the best interface. We are
               very passionate to see you using our service.
             </h2>
-            <button>Write Your First Diary Know</button>
+            <button onClick={() => handleRedirectToDiary()}>
+              Write Your First Diary Know
+            </button>
           </div>
         </Container>
       </div>
