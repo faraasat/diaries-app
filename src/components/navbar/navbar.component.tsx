@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { Container, IconButton, Menu, MenuItem } from "@material-ui/core";
 import "./navbar.styles.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLoginData, logout } from "../../store/login.reducer";
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -28,6 +28,7 @@ export default function NavBar() {
   const { loginState, userData } = useSelector(selectLoginData);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const isMenuOpen = Boolean(anchorEl);
+  const location = useLocation();
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -55,10 +56,12 @@ export default function NavBar() {
       </MenuItem>
     </Menu>
   );
-  // console.log(loginState, userData);
 
   return (
-    <AppBar position="fixed" className="navbar-stick__bg-styles">
+    <AppBar
+      position={location.pathname === "/diaries" ? "static" : "fixed"}
+      className="navbar-stick__bg-styles"
+    >
       <Container maxWidth="xl">
         <Toolbar>
           <Typography
