@@ -15,6 +15,9 @@ export const CreateServer = ({ environment = "test" } = {}) => {
         console.log(localStorage.getItem("loginCred"));
         return localStorage.getItem("loginCred");
       });
+      this.get("api/diaries-data", (): any => {
+        return JSON.parse(localStorage.getItem("allDiariesData")!);
+      });
     },
   });
   return server;

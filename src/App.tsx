@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import LoginData from "./data/login-data.json";
+import DiaryData from "./data/diary-data.json";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getLoginData,
@@ -12,25 +13,52 @@ import {
   initialLoginData,
 } from "./store/login.reducer";
 import { CircularProgress } from "@material-ui/core";
+import {
+  selectDiariesData,
+  InitialDiariesData,
+  getDiariesData,
+  getPublicDiaries,
+  diariesData,
+} from "./store/diaries.reducer";
 
 function App() {
   const dispatch = useDispatch();
   const { loadingState, loginState, loginData } = useSelector(selectLoginData);
+  const { allDiariesData, diaryLoadingState } = useSelector(selectDiariesData);
 
   useEffect(() => {
     if (
       loginData?.length <= 1 &&
       loginData === initialLoginData &&
-      loginData !== null
+      loginData !== null &&
+      !(loginData?.length > 1) &&
+      loadingState === false
     ) {
-      const data = JSON.parse(sessionStorage.getItem("userLoginCred")!);
-      if (data?.length <= 0) {
+      dispatch(getLoginData());
+      const data = JSON.parse(localStorage.getItem("loginCred")!);
+      if (data?.length <= 0 || data === null) {
         dispatch(getLoginData());
         localStorage.setItem("loginCred", JSON.stringify(LoginData));
       }
     }
     let userLoginCred = JSON.parse(sessionStorage.getItem("userLoginCred")!);
-    if (loadingState) {
+
+    if (
+      allDiariesData?.length <= 1 &&
+      allDiariesData === InitialDiariesData &&
+      allDiariesData !== null &&
+      diaryLoadingState === false
+    ) {
+      const data = JSON.parse(localStorage.getItem("allDiariesData")!);
+      if (data?.length <= 0 || data === null) {
+        dispatch(getDiariesData());
+        localStorage.setItem("allDiariesData", JSON.stringify(DiaryData));
+      }
+    }
+    const diaryData = JSON.parse(localStorage.getItem("allDiariesData")!);
+    // let allDiariesDataStorage = JSON.parse(sessionStorage.getItem("allDiariesData")!);
+
+    if (loadingState || diaryLoadingState) {
       <div
         style={{
           width: "100%",
@@ -56,6 +84,11 @@ function App() {
           password: userLoginCred.password,
         })
       );
+
+    diaryLoadingState === false &&
+      allDiariesData === InitialDiariesData &&
+      dispatch(diariesData(diaryData)) &&
+      dispatch(getPublicDiaries());
   });
 
   return (

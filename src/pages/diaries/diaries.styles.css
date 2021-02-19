@@ -1,10 +1,11 @@
 .diaries-page__alignment {
-  height: 100vh;
+  height: calc(100vh - 64px);
   min-height: 600px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow-y: hidden;
 }
 
 .diaries-page__background {
@@ -24,6 +25,60 @@
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
+}
+
+.diaries-page__home {
+  width: 100%;
+  height: calc(100% - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background: linear-gradient(
+    320deg,
+    rgba(1, 1, 1, 0.75),
+    rgba(48, 48, 48, 0.5),
+    rgba(1, 1, 1, 0.6)
+  );
+}
+
+.diaries-page__home-card {
+  box-sizing: border-box !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  min-width: 300px;
+  width: 35vw !important;
+}
+
+.diaries-page__home-action {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 2.5vw !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: column;
+}
+
+.diaries-page__home-action svg {
+  color: silver;
+  font-size: 6.5vw;
+}
+
+.diaries-page__home-action h3 {
+  margin-block: 10px 5px;
+  color: silver;
+  font-family: 'Pacifico', cursive;
+  font-weight: bold;
+  font-size: 2.5vw;
+}
+
+.diaries-page__home-action p {
+  margin-block: 10px 5px;
+  color: goldenrod;
+  font-family: 'Potta One', serif;
+  font-weight: bold;
+  font-size: 1.2vw;
+  text-align: center;
 }
 
 .diaries-page__top-bar {
@@ -77,4 +132,48 @@
 
 .diaries-page__tab-side .MuiTabs-root {
   overflow: visible !important;
+  min-width: 200px;
+}
+
+.tab-panel__top-bar {
+  height: 40px !important;
+  background: linear-gradient(
+    150deg,
+    rgba(132, 161, 255, 0.75),
+    rgba(133, 141, 255, 0.5),
+    rgba(106, 163, 248, 0.9)
+  ) !important;
+  transition: all 1s ease-in-out !important;
+}
+
+.tab-panel__top-bar__container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-direction: row !important;
+}
+
+.tab-panel__box {
+  margin-top: 30px;
+  padding: 0px 30px 30px 30px;
+  height: calc(100vh - 270px) !important;
+  overflow-y: scroll;
+}
+
+.tab-panel__note {
+  background-color: rgb(48, 48, 48);
+  border-radius: 5px;
+  padding: 40px 25px;
+  margin: 20px 10px;
+}
+
+.tab-panel__note-name {
+  background-color: rgba(14, 14, 14);
+  display: inline-block;
+  margin-block: 0em;
+  padding: 10px 25px;
+  border-radius: 3px;
+  color: goldenrod;
+  font-family: 'Pacifico', cursive;
+  text-shadow: 1px 1px 2px rgb(255, 255, 255);
 }
