@@ -6,7 +6,7 @@ import {
   userLoginData,
   login,
 } from "../../store/login.reducer";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Fragment, useState } from "react";
 import {
   Tabs,
@@ -31,7 +31,12 @@ import DialogComponent from "../../components/dialog/dialog.component";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
-import { selectDiariesData } from "../../store/diaries.reducer";
+import PostAddIcon from "@material-ui/icons/PostAdd";
+import {
+  getYourDiaries,
+  postDiaryName,
+  selectDiariesData,
+} from "../../store/diaries.reducer";
 import { IPublicDiaries } from "../../store/diaries";
 
 function TabPanel(props: any) {
@@ -62,18 +67,16 @@ const HtmlTooltip = withStyles((theme: Theme) => ({
 }))(Tooltip);
 
 const DiariesPage = () => {
-  const { loginState, loadingState, userData, loginData } = useSelector(
-    selectLoginData
-  );
-  const { diaryLoadingState, allDiariesData, allPublicDiaries } = useSelector(
+  const { loginState, loadingState, userData } = useSelector(selectLoginData);
+  const { diaryLoadingState, allPublicDiaries, yourDiaries } = useSelector(
     selectDiariesData
   );
   const [value, setValue] = useState<number>(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [onClickOpen, setOnClickOpen] = useState<boolean>(false);
-  const [dialogBoxData, setDialogBoxData] = useState<string>("");
   const [viewState, setViewState] = useState<string>("none");
+  const [changeState, setChangeState] = useState<boolean>(false);
   const [viewData, setViewData] = useState<IPublicDiaries[]>([
     {
       name: "",
@@ -87,18 +90,36 @@ const DiariesPage = () => {
     },
   ]);
 
-  console.log(dialogBoxData);
+  let prevRef = useRef(yourDiaries);
 
   useEffect(() => {
+    const prevChange = changeState;
+    if (
+      prevChange !== changeState &&
+      prevRef !== yourDiaries &&
+      diaryLoadingState !== false
+    ) {
+      dispatch(getYourDiaries(userData.id));
+      console.log("in");
+    }
     if (userData === userLoginData) {
       dispatch(getLoginData());
       dispatch(
         login({ username: userData.username, password: userData.password })
       );
     }
-  }, [dispatch, loadingState, userData]);
+  }, [
+    dispatch,
+    loadingState,
+    userData,
+    changeState,
+    yourDiaries,
+    diaryLoadingState,
+  ]);
 
-  if (loadingState) {
+  prevRef = yourDiaries;
+
+  if (loadingState || diaryLoadingState) {
     return (
       <div
         style={{
@@ -120,17 +141,27 @@ const DiariesPage = () => {
 
   const handleChange = (event: any, newValue: any) => {
     setValue(newValue);
-    console.log(newValue);
   };
 
   const handlePublicDiaries = () => {
     setViewState("public");
     setViewData(allPublicDiaries);
+    setValue(0);
   };
 
   const handleYourDiaries = () => {
     setViewState("your");
+    dispatch(getYourDiaries(userData.id));
+    setValue(0);
   };
+
+  const youDiary = yourDiaries.filter((datum: any) => {
+    return datum.diary_name !== "";
+  });
+
+  const pubDiary = viewData.filter((datum: any) => {
+    return datum.diary_name !== "";
+  });
 
   return (
     <section className="diaries-page__alignment">
@@ -172,7 +203,7 @@ const DiariesPage = () => {
                 className="diaries-page__top-bar__container"
               >
                 <div>
-                  <Button color="inherit">
+                  <Button color="inherit" onClick={() => handleYourDiaries()}>
                     <LocalLibraryIcon />
                     &nbsp;&nbsp;View Your Diaries
                   </Button>
@@ -193,11 +224,117 @@ const DiariesPage = () => {
                 onChange={handleChange}
                 className="diaries-page__tab-side__tabs"
               >
-                {Object.entries(viewData)
-                  .filter((datum: any) => {
-                    return datum[1].name !== "" && datum[1].diary_name !== "";
-                  })
-                  .map(([index, publicDiaries]: [any, any]) => {
+                {pubDiary!.map((publicDiaries: any, index: number) => {
+                  return (
+                    <HtmlTooltip
+                      key={index}
+                      TransitionComponent={Zoom}
+                      disableFocusListener
+                      title={
+                        <Fragment>
+                          <b className="tab_tooltip__head">DiaryName: </b>{" "}
+                          <span>{publicDiaries!.diary_name}</span>
+                          <br />
+                          <b className="tab_tooltip__head">By: </b>{" "}
+                          <span>{publicDiaries!.name.toUpperCase()}</span>
+                          <br />
+                        </Fragment>
+                      }
+                      interactive
+                      placement="right"
+                      arrow
+                    >
+                      <Tab
+                        className="diaries-page__tab-side__tabs-list"
+                        key={Number(index)}
+                        label={
+                          publicDiaries!.diary_name.length <= 15
+                            ? publicDiaries!.diary_name
+                            : publicDiaries!.diary_name.slice(0, 15) + "..."
+                        }
+                      />
+                    </HtmlTooltip>
+                  );
+                })}
+              </Tabs>
+              {pubDiary!.map((publicDiaries: any, index: number) => {
+                return (
+                  <TabPanel
+                    key={Number(index)}
+                    value={value}
+                    index={Number(index)}
+                  >
+                    <AppBar position="static" className="tab-panel__top-bar">
+                      <Container
+                        maxWidth="lg"
+                        className="tab-panel__top-bar__container"
+                      >
+                        <div>
+                          <Button color="inherit">
+                            <LibraryBooksIcon />
+                            &nbsp;&nbsp;Diary Name: {publicDiaries.diary_name}
+                          </Button>
+                        </div>
+                        <div>
+                          <Button color="inherit">
+                            <SupervisedUserCircleIcon />
+                            &nbsp;&nbsp;Author: {publicDiaries.name}
+                          </Button>
+                        </div>
+                      </Container>
+                    </AppBar>
+                    <div className="tab-panel__box">
+                      {publicDiaries!.diary_content!.map((note: any) => {
+                        return (
+                          <div className="tab-panel__note">
+                            <h1 className="tab-panel__note-name">
+                              {note.note_name}
+                            </h1>
+                            <p className="tab-panel__note-content">
+                              {note.note_content}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </TabPanel>
+                );
+              })}
+            </div>
+          </>
+        ) : viewState === "your" ? (
+          <>
+            <AppBar position="static" className="diaries-page__top-bar">
+              <Container
+                maxWidth="lg"
+                className="diaries-page__top-bar__container"
+              >
+                <div>
+                  <Button color="inherit" onClick={() => handlePublicDiaries()}>
+                    <LocalLibraryIcon />
+                    &nbsp;&nbsp;View Public Diaries
+                  </Button>
+                </div>
+                <div>
+                  <Button color="inherit" onClick={() => setOnClickOpen(true)}>
+                    <AddCircleIcon />
+                    &nbsp;&nbsp;Add New Diary
+                  </Button>
+                </div>
+              </Container>
+            </AppBar>
+            <div className="diaries-page__tab-side">
+              {youDiary?.length <= 0 || youDiary === null ? (
+                <div className="diaries-page__no-diary">No Diary Found</div>
+              ) : (
+                <Tabs
+                  orientation="vertical"
+                  variant="scrollable"
+                  value={value}
+                  onChange={handleChange}
+                  className="diaries-page__tab-side__tabs"
+                >
+                  {youDiary!.map((publicDiaries: any, index: number) => {
                     return (
                       <HtmlTooltip
                         key={index}
@@ -205,11 +342,15 @@ const DiariesPage = () => {
                         disableFocusListener
                         title={
                           <Fragment>
-                            <b className="tab_tooltip__head">DiaryName: </b>{" "}
+                            <b className="tab_tooltip__head">Diary Name: </b>{" "}
                             <span>{publicDiaries!.diary_name}</span>
                             <br />
-                            <b className="tab_tooltip__head">By: </b>{" "}
-                            <span>{publicDiaries!.name.toUpperCase()}</span>
+                            <b className="tab_tooltip__head">
+                              Diary Visibility:{" "}
+                            </b>{" "}
+                            <span>
+                              {publicDiaries?.diary_type?.toUpperCase()}
+                            </span>
                             <br />
                           </Fragment>
                         }
@@ -221,144 +362,79 @@ const DiariesPage = () => {
                           className="diaries-page__tab-side__tabs-list"
                           key={Number(index)}
                           label={
-                            publicDiaries!.diary_name.length <= 15
+                            publicDiaries!.diary_name.length <= 11
                               ? publicDiaries!.diary_name
-                              : publicDiaries!.diary_name.slice(0, 15) + "..."
+                              : publicDiaries!.diary_name.slice(0, 11) + "..."
                           }
                         />
                       </HtmlTooltip>
                     );
                   })}
-              </Tabs>
-              {Object.entries(viewData)
-                .filter((datum: any) => {
-                  return datum[1].name !== "" && datum[1].diary_name !== "";
-                })
-                .map(([index, publicDiaries]: [any, any]) => {
-                  return (
-                    <TabPanel
-                      key={Number(index - 1)}
-                      value={value}
-                      index={Number(index - 1)}
-                    >
-                      <AppBar position="static" className="tab-panel__top-bar">
-                        <Container
-                          maxWidth="lg"
-                          className="tab-panel__top-bar__container"
-                        >
-                          <div>
-                            <Button color="inherit">
-                              <LibraryBooksIcon />
-                              &nbsp;&nbsp;Diary Name: {publicDiaries.diary_name}
-                            </Button>
-                          </div>
-                          <div>
-                            <Button color="inherit">
-                              <SupervisedUserCircleIcon />
-                              &nbsp;&nbsp;Author: {publicDiaries.name}
-                            </Button>
-                          </div>
-                        </Container>
-                      </AppBar>
-                      <div className="tab-panel__box">
-                        {publicDiaries!.diary_content!.map((note: any) => {
+                </Tabs>
+              )}
+              {youDiary!.map((publicDiaries: any, index: number) => {
+                return (
+                  <TabPanel
+                    key={Number(index)}
+                    value={value}
+                    index={Number(index)}
+                  >
+                    <AppBar position="static" className="tab-panel__top-bar">
+                      <Container
+                        maxWidth="lg"
+                        className="tab-panel__top-bar__container"
+                      >
+                        <div>
+                          <Button color="inherit">
+                            <LibraryBooksIcon />
+                            &nbsp;&nbsp;Diary Name: {publicDiaries.diary_name}
+                          </Button>
+                        </div>
+                        <div>
+                          <Button color="inherit">
+                            <VisibilityIcon />
+                            &nbsp;&nbsp;Diary Visibility:{" "}
+                            {publicDiaries.diary_type}
+                          </Button>
+                          <Button color="inherit">
+                            <PostAddIcon />
+                            &nbsp;&nbsp;Add New Note
+                          </Button>
+                        </div>
+                      </Container>
+                    </AppBar>
+                    <div className="tab-panel__box">
+                      {publicDiaries!.diary_content.length <= 1 ? (
+                        <div className="tab-panel__no-notes">No Notes</div>
+                      ) : (
+                        publicDiaries!.diary_content!.map((note: any) => {
                           return (
-                            <div className='tab-panel__note'>
-                              <h1 className='tab-panel__note-name'>{note.note_name}</h1>
-                              <p className='tab-panel__note-content'>{note.note_content}</p>
+                            <div className="tab-panel__note">
+                              <h1 className="tab-panel__note-name">
+                                {note.note_name}
+                              </h1>
+                              <p className="tab-panel__note-content">
+                                {note.note_content}
+                              </p>
                             </div>
                           );
-                        })}
-                      </div>
-                    </TabPanel>
-                  );
-                })}
-            </div>
-          </>
-        ) : (
-          <>
-            <AppBar position="static" className="diaries-page__top-bar">
-              <Container
-                maxWidth="lg"
-                className="diaries-page__top-bar__container"
-              >
-                <div>
-                  <Button color="inherit">
-                    <PublicIcon />
-                    &nbsp;&nbsp;View Public Diaries
-                  </Button>
-                  <Button color="inherit">
-                    <LocalLibraryIcon />
-                    &nbsp;&nbsp;View Your Diaries
-                  </Button>
-                </div>
-                <div>
-                  <Button
-                    color="inherit"
-                    onClick={() => {
-                      setOnClickOpen(!onClickOpen);
-                    }}
-                  >
-                    <AddCircleIcon />
-                    &nbsp;&nbsp;Add a New Diary
-                  </Button>
-                </div>
-              </Container>
-            </AppBar>
-            <div className="diaries-page__tab-side">
-              <Tabs
-                orientation="vertical"
-                variant="scrollable"
-                value={value}
-                onChange={handleChange}
-                className="diaries-page__tab-side__tabs"
-              >
-                {loginData!.map((datum: any, index: number) => {
-                  return (
-                    <HtmlTooltip
-                      key={index}
-                      TransitionComponent={Zoom}
-                      disableFocusListener
-                      title={
-                        <Fragment>
-                          <b className="tab_tooltip__head">Username: </b>{" "}
-                          <span>{datum!.username}</span>
-                          <br />
-                          <b className="tab_tooltip__head">
-                            Launch Date UTC:{" "}
-                          </b>{" "}
-                          <span>{datum!.password}</span>
-                          <br />
-                        </Fragment>
-                      }
-                      interactive
-                      placement="right"
-                      arrow
-                    >
-                      <Tab
-                        className="diaries-page__tab-side__tabs-list"
-                        key={index}
-                        label={datum!.username}
-                      />
-                    </HtmlTooltip>
-                  );
-                })}
-              </Tabs>
-              {loginData!.map((datum: any, index: number) => {
-                return (
-                  <TabPanel key={index} value={value} index={index}>
-                    {/* <MissionDetails id={datum?.id} /> */}
+                        })
+                      )}
+                    </div>
                   </TabPanel>
                 );
               })}
-              ;
             </div>
           </>
+        ) : (
+          <></>
         )}
         <DialogComponent
           openClose={onClickOpen}
           setOpenClose={setOnClickOpen}
-          setDialogBoxData={setDialogBoxData}
+          setChangeState={setChangeState}
+          changeState={changeState}
+          performAction={postDiaryName}
         />
       </div>
     </section>

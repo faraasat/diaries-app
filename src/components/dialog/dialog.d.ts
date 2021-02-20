@@ -1,5 +1,7 @@
 export interface IDialogComponent {
   openClose: boolean;
   setOpenClose: React.Dispatch<React.SetStateAction<boolean>>;
-  setDialogBoxData: React.Dispatch<React.SetStateAction<string>>;
+  performAction: any;
+  setChangeState: React.Dispatch<React.SetStateAction<boolean>>;
+  changeState: boolean;
 }

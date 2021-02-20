@@ -35,3 +35,14 @@ export interface IPublicDiaries {
     }
   ];
 }
+
+export interface IYourDiaries {
+  diary_name: string;
+  diary_type: string;
+  diary_content: [
+    {
+      note_name: string;
+      note_content: string;
+    }
+  ];
+}

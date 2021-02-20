@@ -16,7 +16,7 @@
       rgba(74, 95, 90, 0.6),
       rgba(110, 94, 85, 0.6)
     ),
-    url("../../assets/diary-bg-5.jpg");
+    url('../../assets/diary-bg-5.jpg');
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
@@ -109,7 +109,7 @@
 }
 
 .diaries-page__top-bar__container button {
-  font-family: "Potta One", serif !important;
+  font-family: 'Potta One', serif !important;
 }
 
 .diaries-page__tab-side {
@@ -117,7 +117,7 @@
   background-color: rgba(255, 255, 255, 0.5);
   display: flex;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 64px);
 }
 
 .diaries-page__tab-side__tabs {
@@ -157,7 +157,8 @@
   margin-top: 30px;
   padding: 0px 30px 30px 30px;
   height: calc(100vh - 270px) !important;
-  overflow-y: scroll;
+  min-height: calc(600px - 215px);
+  overflow-y: auto;
 }
 
 .tab-panel__note {
@@ -168,12 +169,51 @@
 }
 
 .tab-panel__note-name {
-  background-color: rgba(14, 14, 14);
+  background-color: rgb(0, 0, 0);
   display: inline-block;
   margin-block: 0em;
   padding: 10px 25px;
   border-radius: 3px;
   color: goldenrod;
   font-family: 'Pacifico', cursive;
-  text-shadow: 1px 1px 2px rgb(255, 255, 255);
+  text-shadow: 1px 1px 1px rgb(255, 255, 255);
+}
+
+.tab-panel__note-content {
+  background-color: rgba(255, 140, 207, 0.6);
+  display: inline-block;
+  padding: 20px 25px;
+  border-radius: 3px;
+  color: rgb(255, 255, 255);
+  font-family: 'verdana', serif;
+  text-shadow: 0px 0px 1px rgb(0, 0, 0);
+  font-weight: bold;
+}
+
+.diaries-page__no-diary {
+  font-family: 'Pacifico', cursive;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: antiquewhite;
+  font-weight: bold;
+  font-size: 5.5vw;
+  text-shadow: 0px 0px 5px rgba(1, 1, 1, 1);
+  user-select: none;
+}
+
+.tab-panel__no-notes {
+  font-family: 'Pacifico', cursive;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: antiquewhite;
+  font-weight: bold;
+  font-size: 5.5vw;
+  text-shadow: 0px 0px 5px rgba(1, 1, 1, 1);
+  user-select: none;
 }

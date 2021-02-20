@@ -55,8 +55,6 @@ function App() {
         localStorage.setItem("allDiariesData", JSON.stringify(DiaryData));
       }
     }
-    const diaryData = JSON.parse(localStorage.getItem("allDiariesData")!);
-    // let allDiariesDataStorage = JSON.parse(sessionStorage.getItem("allDiariesData")!);
 
     if (loadingState || diaryLoadingState) {
       <div
@@ -84,6 +82,8 @@ function App() {
           password: userLoginCred.password,
         })
       );
+
+    const diaryData = JSON.parse(localStorage.getItem("allDiariesData")!);
 
     diaryLoadingState === false &&
       allDiariesData === InitialDiariesData &&

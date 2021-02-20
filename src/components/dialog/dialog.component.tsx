@@ -7,16 +7,37 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { IDialogComponent } from "./dialog";
+import { useDispatch, useSelector } from "react-redux";
+import { selectLoginData } from "../../store/login.reducer";
+import "./dialog.styles.css";
+import { getYourDiaries } from "../../store/diaries.reducer";
 
 const DialogComponent: React.FC<IDialogComponent> = ({
   openClose,
   setOpenClose,
-  setDialogBoxData,
+  performAction,
+  setChangeState,
+  changeState,
 }) => {
   const [dialogData, setDialogData] = useState<string>("");
+  const [diaryType, setDiaryType] = useState<string>("private");
+  const dispatch = useDispatch();
+  const { userData } = useSelector(selectLoginData);
 
   const handleSubmitData = () => {
-    setDialogBoxData(dialogData);
+    let dataChange = null;
+    dataChange = dispatch(
+      performAction({
+        diary_name: dialogData,
+        diaryType: diaryType,
+        user_data: userData,
+      })
+    );
+    dataChange &&
+      dataChange.then(() => {
+        dispatch(getYourDiaries(userData.id));
+        setChangeState(!changeState);
+      });
     setOpenClose(false);
   };
 
@@ -43,6 +64,29 @@ const DialogComponent: React.FC<IDialogComponent> = ({
               setDialogData(e.target.value);
             }}
           />
+          <div className="dialog-component__btn">
+            <span className="dialog-component__private-btn">
+              <input
+                type="radio"
+                id="private"
+                value="private"
+                name="diary-type"
+                onClick={() => setDiaryType("private")}
+                defaultChecked
+              />
+              <label htmlFor="private">Private</label>
+            </span>
+            <span className="dialog-component__public-btn">
+              <input
+                type="radio"
+                id="public"
+                value="public"
+                onClick={() => setDiaryType("public")}
+                name="diary-type"
+              />
+              <label htmlFor="public">Public</label>
+            </span>
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
