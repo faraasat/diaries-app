@@ -12,7 +12,6 @@ export const CreateServer = ({ environment = "test" } = {}) => {
         const attr = JSON.parse(request.requestBody);
         data = [...data, attr];
         localStorage.setItem("loginCred", JSON.stringify(data));
-        console.log(localStorage.getItem("loginCred"));
         return localStorage.getItem("loginCred");
       });
       this.get("api/diaries-data", (): any => {

@@ -103,7 +103,6 @@ const DiariesPage = () => {
       diaryLoadingState !== false
     ) {
       dispatch(getYourDiaries(userData.id));
-      console.log("in");
     }
     if (userData === userLoginData) {
       dispatch(getLoginData());

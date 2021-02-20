@@ -128,7 +128,6 @@ const DiariesReducer = createSlice({
       if (youDiary[0]?.length <= 0) return;
 
       youDiary!.map(([index, diaries]: [any, any]) => {
-        console.log(diaries);
         return diaries.public.map((publicDiaries: any) => {
           const yourObj: IYourDiaries = {
             diary_type: "public",
@@ -157,7 +156,6 @@ const DiariesReducer = createSlice({
   },
   extraReducers: {
     [getDiariesData.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.allDiariesData = action.payload;
       state.diaryLoadingState = false;
     },
@@ -170,7 +168,6 @@ const DiariesReducer = createSlice({
       state.diaryLoadingState = true;
     },
     [postDiaryName.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.allDiariesData = action.payload;
       state.diaryLoadingState = false;
     },
@@ -183,7 +180,6 @@ const DiariesReducer = createSlice({
       state.diaryLoadingState = true;
     },
     [postDiaryNote.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.allDiariesData = action.payload;
       state.diaryLoadingState = false;
     },

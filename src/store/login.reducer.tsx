@@ -147,7 +147,6 @@ const LoginReducer = createSlice({
   },
   extraReducers: {
     [getLoginData.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.loginData = action.payload;
       state.loadingState = false;
     },
@@ -160,7 +159,6 @@ const LoginReducer = createSlice({
       state.loadingState = true;
     },
     [postLoginData.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.loginData = action.payload;
       state.loadingState = false;
     },
