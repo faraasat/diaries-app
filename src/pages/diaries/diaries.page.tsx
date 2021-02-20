@@ -35,9 +35,11 @@ import PostAddIcon from "@material-ui/icons/PostAdd";
 import {
   getYourDiaries,
   postDiaryName,
+  postDiaryNote,
   selectDiariesData,
 } from "../../store/diaries.reducer";
 import { IPublicDiaries } from "../../store/diaries";
+import AddNotes from "../../components/add-notes/add-notes.component";
 
 function TabPanel(props: any) {
   const { children, value, index, ...other } = props;
@@ -75,6 +77,7 @@ const DiariesPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [onClickOpen, setOnClickOpen] = useState<boolean>(false);
+  const [addNotes, setAddNotes] = useState<boolean>(false);
   const [viewState, setViewState] = useState<string>("none");
   const [changeState, setChangeState] = useState<boolean>(false);
   const [viewData, setViewData] = useState<IPublicDiaries[]>([
@@ -396,19 +399,34 @@ const DiariesPage = () => {
                             &nbsp;&nbsp;Diary Visibility:{" "}
                             {publicDiaries.diary_type}
                           </Button>
-                          <Button color="inherit">
+                          <Button
+                            color="inherit"
+                            onClick={() => setAddNotes(true)}
+                          >
                             <PostAddIcon />
                             &nbsp;&nbsp;Add New Note
                           </Button>
                         </div>
                       </Container>
                     </AppBar>
+                    <AddNotes
+                      openClose={addNotes}
+                      setOpenClose={setAddNotes}
+                      setChangeState={setChangeState}
+                      changeState={changeState}
+                      performAction={postDiaryNote}
+                      diaryName={publicDiaries.diary_name}
+                      diaryType={publicDiaries.diary_type}
+                    />
                     <div className="tab-panel__box">
                       {publicDiaries!.diary_content.length <= 1 ? (
                         <div className="tab-panel__no-notes">No Notes</div>
                       ) : (
                         publicDiaries!.diary_content!.map((note: any) => {
-                          return (
+                          return note.note_name === "" &&
+                            note.note_content === "" ? (
+                            <></>
+                          ) : (
                             <div className="tab-panel__note">
                               <h1 className="tab-panel__note-name">
                                 {note.note_name}

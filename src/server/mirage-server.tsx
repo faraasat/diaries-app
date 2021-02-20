@@ -92,6 +92,49 @@ export const CreateServer = ({ environment = "test" } = {}) => {
           return allExceptYourDiary;
         }
       });
+      this.post("api/note-post", (schema, response): any => {
+        let diaries = JSON.parse(localStorage.getItem("allDiariesData")!);
+        const resData = JSON.parse(response.requestBody);
+
+        const youDiary = diaries.filter((datum: any) => {
+          return datum.id === resData.user_data.id;
+        });
+
+        const reqData =
+          resData.diary_type === "private"
+            ? youDiary[0].private
+            : youDiary[0].public;
+
+        const reqDiary = reqData.filter((datum: any) => {
+          return datum.diary_name === resData.diary_name;
+        });
+
+        const noteData = {
+          note_name: resData.note_title,
+          note_content: resData.note_detail,
+        };
+
+        reqDiary[0].diary_content = [...reqDiary[0].diary_content, noteData];
+
+        let nonReqDiary = reqData.filter((datum: any) => {
+          return datum.diary_name !== resData.diary_name;
+        });
+
+        nonReqDiary = [...nonReqDiary, reqDiary[0]];
+
+        youDiary[0][resData.diary_type] =
+          resData.diary_type === "private"
+            ? (youDiary[0].private = nonReqDiary)
+            : (youDiary[0].public = nonReqDiary);
+
+        let notReqDiaries = diaries.filter((diary: any) => {
+          return diary.id !== resData.user_data.id;
+        });
+
+        notReqDiaries = [...notReqDiaries, youDiary[0]];
+        localStorage.setItem("allDiariesData", JSON.stringify(notReqDiaries));
+        return notReqDiaries;
+      });
     },
   });
   return server;

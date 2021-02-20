@@ -6,21 +6,23 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { IDialogComponent } from "./dialog";
+import { INotesComponent } from "./add-notes";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLoginData } from "../../store/login.reducer";
-import "./dialog.styles.css";
+import "./add-notes.styles.css";
 import { getYourDiaries } from "../../store/diaries.reducer";
 
-const DialogComponent: React.FC<IDialogComponent> = ({
+const AddNotes: React.FC<INotesComponent> = ({
   openClose,
   setOpenClose,
   performAction,
   setChangeState,
   changeState,
+  diaryName,
+  diaryType,
 }) => {
   const [dialogData, setDialogData] = useState<string>("");
-  const [diaryType, setDiaryType] = useState<string>("private");
+  const [textboxData, setTextboxData] = useState<string>("");
   const dispatch = useDispatch();
   const { userData } = useSelector(selectLoginData);
 
@@ -28,8 +30,10 @@ const DialogComponent: React.FC<IDialogComponent> = ({
     let dataChange = null;
     dataChange = dispatch(
       performAction({
-        diary_name: dialogData,
-        diaryType: diaryType,
+        diary_name: diaryName,
+        diary_type: diaryType,
+        note_title: dialogData,
+        note_detail: textboxData,
         user_data: userData,
       })
     );
@@ -48,56 +52,42 @@ const DialogComponent: React.FC<IDialogComponent> = ({
   return (
     <div>
       <Dialog open={openClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Add a Diary</DialogTitle>
+        <DialogTitle id="form-dialog-title">Add a Note</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Give Your Diary a name. After that you will be able to add notes in
-            it!
+            Give Your Note a title then add details in your favorite note!
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
-            label={`Enter Diary Name`}
+            label={`Enter Note title`}
             type="text"
             fullWidth
             onChange={(e) => {
               setDialogData(e.target.value);
             }}
           />
-          <div className="dialog-component__btn">
-            <span className="dialog-component__private-btn">
-              <input
-                type="radio"
-                id="private"
-                value="private"
-                name="diary-type"
-                onClick={() => setDiaryType("private")}
-                defaultChecked
-              />
-              <label htmlFor="private">Private</label>
-            </span>
-            <span className="dialog-component__public-btn">
-              <input
-                type="radio"
-                id="public"
-                value="public"
-                onClick={() => setDiaryType("public")}
-                name="diary-type"
-              />
-              <label htmlFor="public">Public</label>
-            </span>
-          </div>
+          <br />
+          <br />
+          <textarea
+            className="add-notes__textbox-detail"
+            placeholder={`Detail Goes Here...`}
+            rows={4}
+            onChange={(e) => {
+              setTextboxData(e.target.value);
+            }}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
           <Button
-            disabled={dialogData.length <= 2}
+            disabled={dialogData.length <= 2 || textboxData.length <= 10}
             onClick={handleSubmitData}
             color="primary"
           >
-            Add Diary
+            Add Note
           </Button>
         </DialogActions>
       </Dialog>
@@ -105,4 +95,4 @@ const DialogComponent: React.FC<IDialogComponent> = ({
   );
 };
 
-export default DialogComponent;
+export default AddNotes;
